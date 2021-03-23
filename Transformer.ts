@@ -1,6 +1,9 @@
 import Converter from "./types/Converter.ts";
-
-export default class Transformer<I, O> {
+type stringType = { a: string; b: string; c: string };
+export default class Transformer<
+  I extends Record<PropertyKey, unknown>,
+  O extends Record<PropertyKey, unknown>,
+> {
   private _converter;
 
   constructor(converter: Converter<I, O>) {

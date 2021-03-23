@@ -1,6 +1,6 @@
 import Converter from "./types/Converter.ts";
 
-class Transformer<I, O> {
+export default class Transformer<I, O> {
   private _converter;
 
   constructor(converter: Converter<I, O>) {

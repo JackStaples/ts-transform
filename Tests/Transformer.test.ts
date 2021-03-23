@@ -29,3 +29,19 @@ Deno.test("It can convert to multiple different types", () => {
   const output = transformer.convertOne(input);
   assertEquals(output, { a: String(input.a), b: input, c: input.c === 3 });
 });
+
+Deno.test("It can use multiple values from input in transformation", () => {
+  const numberToNumber: Converter<numberType, numberType> = {
+    a: (input) => input.a + input.b,
+    b: (input) => input.b + input.c,
+    c: (input) => input.c + input.a,
+  };
+  const input = { a: 22, b: 33, c: 44 };
+  const transformer = new Transformer(numberToNumber);
+  const output = transformer.convertOne(input);
+  assertEquals(output, {
+    a: input.a + input.b,
+    b: input.b + input.c,
+    c: input.c + input.a,
+  });
+});

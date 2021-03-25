@@ -70,3 +70,28 @@ Deno.test("It can convert multiple objects", () => {
   ];
   assertEquals(expected, output);
 });
+
+Deno.test("It can convert many objects", () => {
+  type simpleIn = {
+    a: string;
+  };
+  type simpleOut = {
+    a: string;
+  };
+  const converter: Converter<simpleIn, simpleOut> = {
+    a: (input: simpleIn) => "world",
+  };
+  const input: Array<simpleIn> = [];
+  const expected: Array<simpleOut> = [];
+  for (let i = 0; i < 1000000; i++) {
+    input.push({
+      a: "hello",
+    });
+    expected.push({
+      a: "world",
+    });
+  }
+  const transformer = new Transformer(converter);
+  const output = transformer.convertMany(input);
+  assertEquals(expected, output);
+});

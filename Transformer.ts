@@ -15,9 +15,7 @@ export default class Transformer<
   convertOne(input: I): O {
     const retVal = {} as O;
     for (const key of this._keys) {
-      const func = this._converter[key];
-      const val = func(input);
-      retVal[key] = val;
+      retVal[key] = this._getTransformedValue(input, key);
     }
     return retVal;
   }
@@ -27,12 +25,14 @@ export default class Transformer<
     for (let i = 0; i < inputs.length; i++) {
       retVal[i] = {} as O;
       for (const key of this._keys) {
-        const func = this._converter[key];
-        const val = func(inputs[i]);
-        retVal[i][key] = val;
+        retVal[i][key] = this._getTransformedValue(inputs[i], key);
       }
     }
-
     return retVal;
+  }
+
+  private _getTransformedValue(input: I, key: keyof O) {
+    const func = this._converter[key];
+    return func(input);
   }
 }

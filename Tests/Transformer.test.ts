@@ -45,3 +45,28 @@ Deno.test("It can use multiple values from input in transformation", () => {
     c: input.c + input.a,
   });
 });
+
+Deno.test("It can convert multiple objects", () => {
+  type simpleIn = {
+    a: string;
+  };
+  type simpleOut = {
+    a: string;
+  };
+  const converter: Converter<simpleIn, simpleOut> = {
+    a: (input: simpleIn) => "world",
+  };
+  const input = [
+    { a: "hello" },
+    { a: "hello" },
+    { a: "hello" },
+  ];
+  const transformer = new Transformer(converter);
+  const output = transformer.convertAll(input);
+  const expected = [
+    { a: "world" },
+    { a: "world" },
+    { a: "world" },
+  ];
+  assertEquals(expected, output);
+});

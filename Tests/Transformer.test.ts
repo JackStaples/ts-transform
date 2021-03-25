@@ -62,7 +62,7 @@ Deno.test("It can convert multiple objects", () => {
     { a: "hello" },
   ];
   const transformer = new Transformer(converter);
-  const output = transformer.convertAll(input);
+  const output = transformer.convertMany(input);
   const expected = [
     { a: "world" },
     { a: "world" },

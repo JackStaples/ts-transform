@@ -20,4 +20,19 @@ export default class Transformer<
     }
     return retVal;
   }
+
+  convertMany(inputs: Array<I>): Array<O> {
+    const retVal = [] as Array<O>;
+    const keys = Object.keys(this._converter) as Array<keyof Converter<I, O>>;
+    for (let i = 0; i < inputs.length; i++) {
+      retVal[i] = {} as O;
+      for (const key of keys) {
+        const func = this._converter[key];
+        const val = func(inputs[i]);
+        retVal[i][key] = val;
+      }
+    }
+
+    return retVal;
+  }
 }

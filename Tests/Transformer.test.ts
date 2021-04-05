@@ -8,12 +8,12 @@ type mixedType = { a: string; b: numberType; c: boolean };
 
 Deno.test("It can convert between a string object and a number object", () => {
   const stringToNumber: Converter<stringType, numberType> = {
-    a: (input: stringType) => Number.parseInt(input.a),
-    b: (input: stringType) => Number.parseInt(input.b),
-    c: (input: stringType) => Number.parseInt(input.c),
+    a: (input) => Number.parseInt(input.a),
+    b: (input) => Number.parseInt(input.b),
+    c: (input) => Number.parseInt(input.c),
   };
-  const input = { a: "22", b: "33", c: "44" };
   const transformer = new Transformer(stringToNumber);
+  const input = { a: "22", b: "33", c: "44" };
   const output = transformer.convertOne(input);
   assertEquals(output, { a: 22, b: 33, c: 44 });
 });
@@ -24,8 +24,8 @@ Deno.test("It can convert to multiple different types", () => {
     b: (input) => input,
     c: (input) => input.c === 3,
   };
-  const input = { a: 22, b: 33, c: 44 };
   const transformer = new Transformer(numberToMixed);
+  const input = { a: 22, b: 33, c: 44 };
   const output = transformer.convertOne(input);
   assertEquals(output, { a: String(input.a), b: input, c: input.c === 3 });
 });
@@ -36,8 +36,8 @@ Deno.test("It can use multiple values from input in transformation", () => {
     b: (input) => input.b + input.c,
     c: (input) => input.c + input.a,
   };
-  const input = { a: 22, b: 33, c: 44 };
   const transformer = new Transformer(numberToNumber);
+  const input = { a: 22, b: 33, c: 44 };
   const output = transformer.convertOne(input);
   assertEquals(output, {
     a: input.a + input.b,
@@ -54,14 +54,14 @@ Deno.test("It can convert multiple objects", () => {
     a: string;
   };
   const converter: Converter<simpleIn, simpleOut> = {
-    a: (input: simpleIn) => "world",
+    a: () => "world",
   };
+  const transformer = new Transformer(converter);
   const input = [
     { a: "hello" },
     { a: "hello" },
     { a: "hello" },
   ];
-  const transformer = new Transformer(converter);
   const output = transformer.convertMany(input);
   const expected = [
     { a: "world" },
@@ -79,7 +79,7 @@ Deno.test("It can convert many objects", () => {
     a: string;
   };
   const converter: Converter<simpleIn, simpleOut> = {
-    a: (input: simpleIn) => "world",
+    a: () => "world",
   };
   const input: Array<simpleIn> = [];
   const expected: Array<simpleOut> = [];

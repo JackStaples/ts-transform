@@ -1,5 +1,4 @@
 import Converter from "./types/Converter.ts";
-type stringType = { a: string; b: string; c: string };
 export default class Transformer<
   I extends Record<PropertyKey, unknown>,
   O extends Record<PropertyKey, unknown>,
@@ -23,10 +22,7 @@ export default class Transformer<
   convertMany(inputs: Array<I>): Array<O> {
     const retVal = [] as Array<O>;
     for (let i = 0; i < inputs.length; i++) {
-      retVal[i] = {} as O;
-      for (const key of this._keys) {
-        retVal[i][key] = this._getTransformedValue(inputs[i], key);
-      }
+      retVal[i] = this.convertOne(inputs[i]);
     }
     return retVal;
   }
